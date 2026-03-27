@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="getBooks.py" width="680">
+  <img src="logo.svg" alt="getBooks.py" width="680">
 </p>
 
 <p align="center">
