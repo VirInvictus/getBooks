@@ -28,6 +28,9 @@ This tool reads the SQLite database directly in read-only mode. It resolves Cali
 | **Series** | `--series` | List all series with completeness status and gap detection |
 | **Export** | `--export` | Full library export to JSON or CSV for external tools |
 | **Wings** | `--wings` | List all virtual libraries with book counts |
+| **Version** | `--version` | Show version and exit |
+
+Modifiers: `--show-tags` swaps ratings for tag display in catalogs, `--show-id` prefixes each book with its Calibre ID (useful for scripting against `calibredb set_metadata`), `--primary-only` collapses multi-author entries to the first author, `--quiet` suppresses decorative output.
 
 Running with no arguments launches an interactive menu.
 
@@ -40,6 +43,12 @@ None beyond Python 3.9+. The script uses only stdlib modules (`sqlite3`, `json`,
 ```bash
 # Build a catalog for a specific wing
 python getBooks.py --catalog --wing "The Tabletop" --primary-only --db ~/Calibre/metadata.db
+
+# Same catalog, but showing tags instead of star ratings
+python getBooks.py --catalog --wing "The Tabletop" --show-tags --db ~/Calibre/metadata.db
+
+# Catalog with Calibre IDs (for piping into calibredb set_metadata scripts)
+python getBooks.py --catalog --show-id --db ~/Calibre/metadata.db
 
 # Generate catalogs for all virtual libraries at once
 python getBooks.py --all-wings --db ~/Calibre/metadata.db --outdir ~/docs/catalogs
@@ -61,6 +70,9 @@ python getBooks.py --export --db ~/Calibre/metadata.db --format json --output li
 
 # List all virtual library wings with counts
 python getBooks.py --wings --db ~/Calibre/metadata.db
+
+# Check version
+python getBooks.py --version
 ```
 
 If `metadata.db` is in the current directory or at `~/Calibre Library/metadata.db`, the `--db` flag can be omitted.
@@ -143,19 +155,22 @@ Calibre stores ratings on a 0–10 scale internally (where 10 = 5 stars). The sc
 
 If you previously generated catalogs through a `calibredb list → JSON → parser` pipeline, `--all-wings` replaces that entire workflow with a single command. No temp files, no intermediate JSON, no shell glue functions.
 
+The `--show-id` flag outputs Calibre book IDs, making it straightforward to pipe results into `calibredb set_metadata` for batch operations.
+
 ## Full help output
 
 ```
-usage: getBooks.py [-h]
+usage: getBooks.py [-h] [--version]
                    [--catalog | --all-wings | --stats | --audit | --recent [RECENT]
                    | --series | --export | --wings] [--db DB] [--wing WING]
                    [--output OUTPUT] [--outdir OUTDIR] [--format {json,csv}]
-                   [--primary-only] [--quiet]
+                   [--primary-only] [--show-tags] [--show-id] [--quiet]
 
 Calibre library toolkit: catalog, stats, audit, export
 
 options:
   -h, --help           show this help message and exit
+  --version            show program's version number and exit
   --catalog            Build a text catalog
   --all-wings          Generate catalogs for all virtual libraries
   --stats              Show library statistics
@@ -169,7 +184,10 @@ options:
   --output OUTPUT      Output file path
   --outdir OUTDIR      Output directory for --all-wings (default: current dir)
   --format {json,csv}  Export format (default: json)
-  --primary-only       Use only the first author (useful for TTRPG collections)
+  --primary-only       Use only the first author (useful for TTRPG
+                       collections)
+  --show-tags          Show tags instead of ratings in catalog output
+  --show-id            Prefix each book with its Calibre ID for scripting
   --quiet              Minimize output
 ```
 
