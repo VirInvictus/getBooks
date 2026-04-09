@@ -40,5 +40,3 @@ What's done, what's next. Updated as of v1.0.3.
 - [ ] **Wing overlap analysis** — show which books appear in multiple virtual libraries
 - [ ] **Format migration report** — identify books only available in deprecated formats (MOBI, LIT)
 - [ ] **Color CLI output** — ANSI color for terminal output in non-interactive mode
-t** — identify books only available in deprecated formats (MOBI, LIT)
-- [ ] **Color CLI output** — ANSI color for terminal output in non-interactive mode
