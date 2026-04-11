@@ -1,4 +1,4 @@
-# getBooks — Roadmap
+# Quarry — Roadmap
 
 What's done, what's next. Updated as of v1.0.3.
 
