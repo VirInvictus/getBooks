@@ -1,66 +1,45 @@
 <svg width="100%" viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
-<style>
-:root {
-  --p: #1a1a1a;
-  --s: #888;
-  --t: #aaa;
-  --b: #ddd;
-  --bg2: #f5f5f5;
-  --font: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', 'Fira Code', Consolas, 'Liberation Mono', Menlo, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --p: #e8e8e8;
-    --s: #888;
-    --t: #666;
-    --b: #333;
-    --bg2: #1a1a1a;
-  }
-}
-</style>
 
-<rect x="40" y="40" width="600" height="240" fill="none" stroke="var(--s)" stroke-width="0.5"/>
+<rect x="40" y="40" width="600" height="240" fill="none" stroke="#8490a0" stroke-width="0.5"/>
 
-<rect x="40" y="40" width="600" height="32" fill="var(--bg2)"/>
-<line x1="40" y1="72" x2="640" y2="72" stroke="var(--s)" stroke-width="0.5"/>
+<rect x="40" y="40" width="600" height="32" fill="#8490a0" fill-opacity="0.08"/>
+<line x1="40" y1="72" x2="640" y2="72" stroke="#8490a0" stroke-width="0.5"/>
 
-<circle cx="60" cy="56" r="5" fill="none" stroke="var(--t)" stroke-width="0.5"/>
-<circle cx="78" cy="56" r="5" fill="none" stroke="var(--t)" stroke-width="0.5"/>
-<circle cx="96" cy="56" r="5" fill="none" stroke="var(--t)" stroke-width="0.5"/>
+<circle cx="60" cy="56" r="5" fill="none" stroke="#8490a0" stroke-width="0.5"/>
+<circle cx="78" cy="56" r="5" fill="none" stroke="#8490a0" stroke-width="0.5"/>
+<circle cx="96" cy="56" r="5" fill="none" stroke="#8490a0" stroke-width="0.5"/>
 
-<text x="340" y="59" text-anchor="middle" font-family="var(--font)" font-size="11" fill="var(--s)" font-weight="400">~/Calibre $ cquarry</text>
+<text x="340" y="59" text-anchor="middle" font-family="'SF Mono','Cascadia Code','JetBrains Mono','Fira Code',Consolas,'Liberation Mono',Menlo,monospace" font-size="11" fill="#8490a0" font-weight="400">~/Calibre $ cquarry</text>
 
-<g opacity="0.08">
-  <rect x="80" y="100" width="18" height="24" fill="var(--p)" rx="1"/>
-  <rect x="102" y="96" width="18" height="28" fill="var(--p)" rx="1"/>
-  <rect x="124" y="102" width="18" height="22" fill="var(--p)" rx="1"/>
-  <rect x="146" y="94" width="18" height="30" fill="var(--p)" rx="1"/>
-  <rect x="168" y="98" width="18" height="26" fill="var(--p)" rx="1"/>
-  <rect x="190" y="104" width="18" height="20" fill="var(--p)" rx="1"/>
-  <rect x="212" y="92" width="18" height="32" fill="var(--p)" rx="1"/>
-  <rect x="234" y="100" width="18" height="24" fill="var(--p)" rx="1"/>
+<g opacity="0.06">
+  <rect x="80" y="100" width="18" height="24" fill="#5a6270" rx="1"/>
+  <rect x="102" y="96" width="18" height="28" fill="#5a6270" rx="1"/>
+  <rect x="124" y="102" width="18" height="22" fill="#5a6270" rx="1"/>
+  <rect x="146" y="94" width="18" height="30" fill="#5a6270" rx="1"/>
+  <rect x="168" y="98" width="18" height="26" fill="#5a6270" rx="1"/>
+  <rect x="190" y="104" width="18" height="20" fill="#5a6270" rx="1"/>
+  <rect x="212" y="92" width="18" height="32" fill="#5a6270" rx="1"/>
+  <rect x="234" y="100" width="18" height="24" fill="#5a6270" rx="1"/>
 
-  <rect x="444" y="98" width="18" height="26" fill="var(--p)" rx="1"/>
-  <rect x="466" y="92" width="18" height="32" fill="var(--p)" rx="1"/>
-  <rect x="488" y="102" width="18" height="22" fill="var(--p)" rx="1"/>
-  <rect x="510" y="96" width="18" height="28" fill="var(--p)" rx="1"/>
-  <rect x="532" y="104" width="18" height="20" fill="var(--p)" rx="1"/>
-  <rect x="554" y="94" width="18" height="30" fill="var(--p)" rx="1"/>
-  <rect x="576" y="100" width="18" height="24" fill="var(--p)" rx="1"/>
-  <rect x="598" y="96" width="18" height="28" fill="var(--p)" rx="1"/>
+  <rect x="444" y="98" width="18" height="26" fill="#5a6270" rx="1"/>
+  <rect x="466" y="92" width="18" height="32" fill="#5a6270" rx="1"/>
+  <rect x="488" y="102" width="18" height="22" fill="#5a6270" rx="1"/>
+  <rect x="510" y="96" width="18" height="28" fill="#5a6270" rx="1"/>
+  <rect x="532" y="104" width="18" height="20" fill="#5a6270" rx="1"/>
+  <rect x="554" y="94" width="18" height="30" fill="#5a6270" rx="1"/>
+  <rect x="576" y="100" width="18" height="24" fill="#5a6270" rx="1"/>
+  <rect x="598" y="96" width="18" height="28" fill="#5a6270" rx="1"/>
 </g>
 
-<text x="340" y="155" text-anchor="middle" font-family="var(--font)" font-size="48" fill="var(--p)" font-weight="500" letter-spacing="-2">CalibreQuarry</text>
-<text x="340" y="180" text-anchor="middle" font-family="var(--font)" font-size="16" fill="var(--s)" font-weight="400" letter-spacing="8">.py</text>
+<text x="340" y="155" text-anchor="middle" font-family="'SF Mono','Cascadia Code','JetBrains Mono','Fira Code',Consolas,'Liberation Mono',Menlo,monospace" font-size="48" fill="#5a6270" font-weight="500" letter-spacing="-2">CalibreQuarry</text>
 
-<line x1="140" y1="210" x2="540" y2="210" stroke="var(--b)" stroke-width="0.5"/>
+<line x1="140" y1="190" x2="540" y2="190" stroke="#8490a0" stroke-width="0.5"/>
 
-<text x="340" y="232" text-anchor="middle" font-family="var(--font)" font-size="11" fill="var(--t)" font-weight="400" letter-spacing="3">CATALOG · AUDIT · SERIES · EXPORT</text>
+<text x="340" y="212" text-anchor="middle" font-family="'SF Mono','Cascadia Code','JetBrains Mono','Fira Code',Consolas,'Liberation Mono',Menlo,monospace" font-size="11" fill="#8490a0" font-weight="400" letter-spacing="3">CATALOG · AUDIT · SERIES · EXPORT</text>
 
-<rect x="40" y="252" width="600" height="28" fill="var(--bg2)"/>
-<line x1="40" y1="252" x2="640" y2="252" stroke="var(--s)" stroke-width="0.5"/>
+<rect x="40" y="252" width="600" height="28" fill="#8490a0" fill-opacity="0.08"/>
+<line x1="40" y1="252" x2="640" y2="252" stroke="#8490a0" stroke-width="0.5"/>
 
-<text x="56" y="270" font-family="var(--font)" font-size="10" fill="var(--t)" font-weight="400">$ --catalog  --all-wings  --stats  --audit  --recent  --series  --export  --wings</text>
+<text x="56" y="270" font-family="'SF Mono','Cascadia Code','JetBrains Mono','Fira Code',Consolas,'Liberation Mono',Menlo,monospace" font-size="10" fill="#8490a0" font-weight="400">--catalog  --all-wings  --stats  --audit  --recent  --series  --export  --wings</text>
 
 </svg>
-/svg>
