@@ -44,6 +44,26 @@ def show_stats(db: CalibreDB, *, quiet: bool = False) -> None:
     pct = f"{unrated * 100 / total:.1f}%" if total else "N/A"
     print(f"  Unrated:       {unrated:5d}  ({pct})")
 
+    # Top authors
+    author_counts: Counter = Counter()
+    for b in books:
+        if b['authors']:
+            author = normalize_author_display(b['authors'], primary_only=True)
+            author_counts[author] += 1
+    print(f"\nTop authors ({len(author_counts)} distinct):")
+    for author, count in author_counts.most_common(10):
+        print(f"  {author}: {count}")
+
+    # Top tags
+    tag_counts: Counter = Counter()
+    for b in books:
+        if b['tags']:
+            for t in b['tags'].split(','):
+                tag_counts[t.strip()] += 1
+    print(f"\nTop tags ({len(tag_counts)} distinct):")
+    for tag, count in tag_counts.most_common(15):
+        print(f"  {tag}: {count}")
+
     # Tag taxonomy
     tags = db.get_all_tags()
     top_level: Counter = Counter()

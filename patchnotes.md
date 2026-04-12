@@ -1,5 +1,15 @@
 # CalibreQuarry — Patch Notes
 
+## v2.0.1 (2026-04-12)
+
+---
+
+### New Features
+
+**Top Authors and Top Tags in `--stats`.** The statistics output now includes a "Top authors" section (10 most prolific by book count) and a "Top tags" section (15 most-used tags), inserted between the ratings distribution and the tag taxonomy breakdown.
+
+---
+
 ## v2.0.0 (2026-04-12)
 
 ---
