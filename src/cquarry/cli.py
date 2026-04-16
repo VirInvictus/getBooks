@@ -11,7 +11,7 @@ from cquarry.modes.catalog import write_catalog, write_all_wings
 from cquarry.modes.stats import show_stats
 from cquarry.modes.audit import run_audit
 from cquarry.modes.display import show_recent, show_series, show_wings
-from cquarry.modes.export import run_export
+from cquarry.modes.export import run_export, run_search_export
 from cquarry.tui import interactive_menu, _reset_terminal
 
 
@@ -36,7 +36,9 @@ def build_parser() -> argparse.ArgumentParser:
     group.add_argument("--series", action="store_true",
                        help="List all series with completeness and gap detection")
     group.add_argument("--export", action="store_true",
-                       help="Export library to JSON or CSV")
+                       help="Export library to JSON, CSV, or AI format")
+    group.add_argument("--search", default=None, metavar="QUERY",
+                       help="Export books matching a Calibre search expression")
     group.add_argument("--wings", action="store_true",
                        help="List all virtual library wings")
 
@@ -47,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", default=None, help="Output file path")
     p.add_argument("--outdir", default=None,
                    help="Output directory for --all-wings (default: current dir)")
-    p.add_argument("--format", choices=["json", "csv"], default="json",
+    p.add_argument("--format", choices=["json", "csv", "ai"], default="json",
                    help="Export format (default: json)")
     p.add_argument("--primary-only", dest="primary_only", action="store_true",
                    help="Use only the first author (useful for TTRPG collections)")
@@ -108,6 +110,11 @@ def main(argv: Optional[List[str]] = None) -> int:
                 fmt = args.format or "json"
                 output = args.output or f"library.{fmt}"
                 run_export(db, output, fmt, quiet=args.quiet)
+                return 0
+
+            if args.search:
+                output = args.output or "search_results.txt"
+                run_search_export(db, args.search, output, quiet=args.quiet)
                 return 0
 
             if args.wings:

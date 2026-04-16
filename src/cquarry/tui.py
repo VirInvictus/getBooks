@@ -14,7 +14,7 @@ from cquarry.modes.catalog import write_catalog, write_all_wings
 from cquarry.modes.stats import show_stats
 from cquarry.modes.audit import run_audit
 from cquarry.modes.display import show_recent, show_series, show_wings
-from cquarry.modes.export import run_export
+from cquarry.modes.export import run_export, run_search_export
 
 try:
     import curses
@@ -472,6 +472,7 @@ _MAIN_SECTIONS = [
         "Generate all wing catalogs",
         "Library statistics",
         "Audit (issues report)",
+        "Search query export",
     ]),
     ("LISTS", [
         "Recently added",
@@ -479,7 +480,7 @@ _MAIN_SECTIONS = [
         "List wings",
     ]),
     ("EXPORT", [
-        "Export (JSON/CSV)",
+        "Export (JSON/CSV/AI)",
     ]),
     ("SETTINGS", [
         "Change database path",
@@ -492,10 +493,11 @@ _MAIN_FALLBACK_MAP = {
     "2": (0, 1), "all": (0, 1),
     "3": (0, 2), "stats": (0, 2),
     "4": (0, 3), "audit": (0, 3),
-    "5": (1, 0), "recent": (1, 0),
-    "6": (1, 1), "series": (1, 1),
-    "7": (1, 2), "wings": (1, 2),
-    "8": (2, 0), "export": (2, 0),
+    "5": (0, 4), "search": (0, 4),
+    "6": (1, 0), "recent": (1, 0),
+    "7": (1, 1), "series": (1, 1),
+    "8": (1, 2), "wings": (1, 2),
+    "9": (2, 0), "export": (2, 0),
     "s": (3, 0), "settings": (3, 0), "config": (3, 0),
     "q": None, "quit": None, "exit": None,
 }
@@ -505,13 +507,13 @@ def _select_main() -> Optional[tuple]:
     if _USE_CURSES:
         return _tui_select(f"CalibreQuarry v{VERSION}", _MAIN_SECTIONS)
     _box_menu(f"CalibreQuarry v{VERSION}", [
-        ("OUTPUT", ["1) Build catalog", "2) Generate all wings", "3) Statistics", "4) Audit"]),
-        ("LISTS", ["5) Recently added", "6) Series list", "7) List wings"]),
-        ("EXPORT", ["8) Export (JSON/CSV)"]),
+        ("OUTPUT", ["1) Build catalog", "2) Generate all wings", "3) Statistics", "4) Audit", "5) Search query export"]),
+        ("LISTS", ["6) Recently added", "7) Series list", "8) List wings"]),
+        ("EXPORT", ["9) Export (JSON/CSV/AI)"]),
         ("SETTINGS", ["s) Change database path"]),
         ("", ["q) Quit"]),
     ])
-    return _fallback_input("  Select [1-8/s/q]: ", _MAIN_FALLBACK_MAP)
+    return _fallback_input("  Select [1-9/s/q]: ", _MAIN_FALLBACK_MAP)
 
 
 # =====================================
@@ -621,6 +623,13 @@ def interactive_menu() -> int:
                 _reset_terminal()
                 _run_with_capture("Audit", lambda: run_audit(db, output))
 
+            elif result == (0, 4):
+                query = _prompt_str("Search query (Calibre format)", "")
+                if query:
+                    output = _prompt_str("Output file", "search_results.txt")
+                    _reset_terminal()
+                    _run_with_capture("Search Results", lambda: run_search_export(db, query, output))
+
             elif result == (1, 0):
                 count = _prompt_int("How many", 20)
                 _reset_terminal()
@@ -635,7 +644,7 @@ def interactive_menu() -> int:
                 _run_with_capture("Virtual Libraries", lambda: show_wings(db))
 
             elif result == (2, 0):
-                fmt = _prompt_str("Format (json/csv)", "json")
+                fmt = _prompt_str("Format (json/csv/ai)", "json")
                 output = _prompt_str("Output file", f"library.{fmt}")
                 _reset_terminal()
                 _run_with_capture("Export", lambda: run_export(db, output, fmt))

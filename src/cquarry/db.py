@@ -150,6 +150,10 @@ class CalibreDB:
 
     # --- Virtual library resolution ---
 
+    def search(self, query: str) -> Set[int]:
+        """Resolve an arbitrary Calibre search expression."""
+        return self._eval_vl_expr(query, set())
+
     def resolve_vl(self, vl_name: str) -> Set[int]:
         """Resolve a virtual library name to a set of book IDs.
 

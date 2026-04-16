@@ -39,8 +39,8 @@ What's done, what's next. Updated as of v2.0.0.
 ## Phase 4: Extended Capabilities (Future)
 *Expanding on the analytics without altering the database.*
 
-- [ ] **Search Query Export** — Run Calibre-style search expressions directly from the CLI to generate a text file of matching results. The tool will notify the user and avoid creating an empty file if the query yields no results.
-- [ ] **AI-readable export** — token-efficient flat format for LLM recommendation prompts
+- [x] **Search Query Export** — Run Calibre-style search expressions directly from the CLI to generate a text file of matching results. The tool will notify the user and avoid creating an empty file if the query yields no results.
+- [x] **AI-readable export** — token-efficient flat format for LLM recommendation prompts
 - [ ] **Tag tree visualization** — display the full hierarchical tag taxonomy as a tree
 - [ ] **Reading pace stats** — books added per month/year trend from `timestamp` column
 - [ ] **Duplicate detection** — same title+author appearing in multiple formats or editions

@@ -2,7 +2,7 @@ import json
 import os
 from typing import Optional
 
-VERSION = "2.0.1"
+VERSION = "2.1.0"
 
 DEFAULT_DB_PATHS = [
     "metadata.db",

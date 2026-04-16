@@ -1,5 +1,17 @@
 # CalibreQuarry — Patch Notes
 
+## v2.1.0 (2026-04-16)
+
+---
+
+### New Features
+
+**Search Query Export.** You can now pass arbitrary Calibre search expressions directly to the CLI via `--search "query"` to export matching books. The results are written to a plain text file. This feature is also accessible via the interactive TUI under the `OUTPUT` menu.
+
+**AI-Readable Export.** Added a new `ai` format to the `--export` option. This format outputs the library data as a highly token-efficient, flat text list designed specifically for LLM ingestion and recommendation prompts (e.g., `Title by Author [Tags] - Rating/5`).
+
+---
+
 ## v2.0.1 (2026-04-12)
 
 ---
