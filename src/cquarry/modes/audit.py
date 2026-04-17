@@ -105,21 +105,25 @@ def run_audit(db: CalibreDB, output: str, *, quiet: bool = False) -> None:
                 issue_counts[problem] += 1
 
         print(f"Audited {len(books)} books, {len(all_series)} series.")
-        print(f"Found {len(issues)} issues total.\n")
+        
+        issue_str = f"{len(issues)} issues"
+        if len(issues) > 0:
+            issue_str = color(issue_str, C_ERR)
+        print(f"Found {issue_str} total.\n")
 
         if issue_counts:
-            print("Book issues:")
+            print(color("Book issues:", C_HEADER))
             for problem, count in issue_counts.most_common():
                 print(f"  {problem}: {count}")
 
         if duplicate_issues:
-            print(f"\nDuplicates found: {len(duplicate_issues)}")
+            print("\n" + color(f"Duplicates found: {len(duplicate_issues)}", C_WARN))
             for i in duplicate_issues[:10]:
                 print(f"  {i['title']} by {i['author']} (IDs: {i['id']})")
 
         if series_issues:
-            print(f"\nSeries with gaps: {len(series_issues)}")
+            print("\n" + color(f"Series with gaps: {len(series_issues)}", C_WARN))
             for i in series_issues[:10]:
                 print(f"  {i['title']}: {i['issues']}")
 
-        print(f"\nFull report: {out_path}")
+        print(f"\nFull report: {color(out_path, C_TITLE)}")

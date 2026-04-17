@@ -126,6 +126,51 @@ class CalibreDB:
         """)
         return [dict(row) for row in cur.fetchall()]
 
+    def get_custom_columns(self) -> Dict[str, Dict[str, Any]]:
+        """Return metadata for all custom columns, keyed by display name."""
+        cur = self.conn.cursor()
+        try:
+            cur.execute("SELECT id, label, name, datatype, is_multiple FROM custom_columns")
+            return {row['name']: dict(row) for row in cur.fetchall()}
+        except sqlite3.OperationalError:
+            return {}
+
+    def load_custom_column(self, col_name: str) -> Dict[int, Any]:
+        """Load values for a specific custom column (by display name). Returns {book_id: value(s)}."""
+        cols = self.get_custom_columns()
+        if col_name not in cols:
+            raise ValueError(f"Custom column '{col_name}' not found. Available: {', '.join(cols.keys())}")
+        
+        col = cols[col_name]
+        cid = col['id']
+        cur = self.conn.cursor()
+        
+        results = {}
+        try:
+            if col['is_multiple']:
+                # For multiple values (e.g. tags-like), it's a many-to-many relationship
+                cur.execute(f"""
+                    SELECT l.book, c.value 
+                    FROM books_custom_column_{cid}_link l
+                    JOIN custom_column_{cid} c ON c.id = l.value
+                """)
+                for row in cur.fetchall():
+                    book_id = row['book']
+                    if book_id not in results:
+                        results[book_id] = []
+                    results[book_id].append(row['value'])
+                # Convert lists to comma-separated strings for consistency with other fields
+                return {k: ", ".join(v) for k, v in results.items()}
+            else:
+                # For single values (text, int, bool, date), it's one-to-one
+                cur.execute(f"SELECT book, value FROM custom_column_{cid}")
+                for row in cur.fetchall():
+                    results[row['book']] = row['value']
+                return results
+        except sqlite3.OperationalError as e:
+            print(f"Warning: could not read custom column '{col_name}': {e}", file=sys.stderr)
+            return {}
+
     def get_virtual_libraries(self) -> Dict[str, str]:
         """Return {name: search_expression} from Calibre preferences."""
         if self._vl_cache is not None:

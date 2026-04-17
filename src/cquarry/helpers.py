@@ -7,6 +7,18 @@ from typing import List, Optional, Tuple
 
 from cquarry.config import CALIBRE_RATING_SCALE, DEFAULT_DB_PATHS, get_db_path, set_db_path
 
+C_HEADER = "1;33"  # Bold Yellow
+C_TITLE = "1;36"   # Bold Cyan
+C_ERR = "1;31"     # Bold Red
+C_WARN = "1;35"    # Bold Magenta
+C_DIM = "2"        # Dim
+
+def color(text: str, code: str) -> str:
+    """Wrap text in ANSI color codes if stdout is a TTY."""
+    if sys.stdout.isatty():
+        return f"\033[{code}m{text}\033[0m"
+    return text
+
 
 def get_jpeg_size(filepath: str) -> Optional[Tuple[int, int]]:
     """Parse JPEG header to extract (width, height) without external dependencies."""

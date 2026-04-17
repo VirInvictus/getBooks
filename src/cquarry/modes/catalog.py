@@ -8,8 +8,11 @@ from typing import Optional
 
 from cquarry.db import CalibreDB
 from cquarry.helpers import (
+    C_HEADER,
+    C_TITLE,
     author_sort_key,
     calibre_rating_to_stars,
+    color,
     format_stars,
     normalize_author_display,
 )
@@ -18,6 +21,7 @@ from cquarry.helpers import (
 def write_catalog(db: CalibreDB, output: str, *,
                   wing: Optional[str] = None, primary_only: bool = False,
                   show_tags: bool = False, show_id: bool = False,
+                  show_custom: Optional[str] = None,
                   quiet: bool = False) -> None:
     """Write a formatted text catalog, optionally filtered to a virtual library."""
     books = db.get_all_books()
@@ -30,7 +34,7 @@ def write_catalog(db: CalibreDB, output: str, *,
             return
         books = [b for b in books if b['id'] in valid_ids]
         if not quiet:
-            print(f"Wing '{wing}': {len(books)} books")
+            print(f"Wing '{color(wing, C_TITLE)}': {len(books)} books")
 
     if not books:
         if not quiet:
@@ -38,6 +42,14 @@ def write_catalog(db: CalibreDB, output: str, *,
         return
 
     books.sort(key=lambda b: (author_sort_key(b['author_sort'], primary_only), b['title_sort'] or ''))
+
+    custom_data = {}
+    if show_custom:
+        try:
+            custom_data = db.load_custom_column(show_custom)
+        except ValueError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return
 
     with open(output, 'w', encoding='utf-8') as f:
         header = f"Calibre Library Export \u2014 {datetime.now().strftime('%Y-%m-%d %H:%M')}"
@@ -83,18 +95,26 @@ def write_catalog(db: CalibreDB, output: str, *,
             fmt_str = f" [{formats}]" if formats else ""
 
             id_str = f"[{book['id']}] " if show_id else ""
-            f.write(f"  * {id_str}{title}{series_str}{fmt_str}{meta_str}\n")
+            
+            custom_str = ""
+            if show_custom:
+                val = custom_data.get(book['id'])
+                if val:
+                    custom_str = f" <{show_custom}: {val}>"
+            
+            f.write(f"  * {id_str}{title}{series_str}{fmt_str}{meta_str}{custom_str}\n")
             book_count += 1
 
         f.write(f"\n{'=' * 40}\n")
         f.write(f"Total: {book_count} books\n")
 
     if not quiet:
-        print(f"Catalog written: {output} ({book_count} books)")
+        print(f"Catalog written: {color(output, C_TITLE)} ({book_count} books)")
 
 
 def write_all_wings(db: CalibreDB, outdir: str, *, primary_only: bool = False,
                     show_tags: bool = False, show_id: bool = False,
+                    show_custom: Optional[str] = None,
                     quiet: bool = False) -> None:
     """Generate a catalog file for each virtual library wing."""
     vls = db.get_virtual_libraries()
@@ -108,9 +128,10 @@ def write_all_wings(db: CalibreDB, outdir: str, *, primary_only: bool = False,
         safe_name = re.sub(r'[^\w\s-]', '', name).strip().replace(' ', '_')
         output = os.path.join(outdir, f"{safe_name}_Library.txt")
         if not quiet:
-            print(f"\u2192 {name}")
+            print(f"\u2192 {color(name, C_HEADER)}")
         write_catalog(db, output, wing=name, primary_only=primary_only,
-                      show_tags=show_tags, show_id=show_id, quiet=True)
+                      show_tags=show_tags, show_id=show_id, 
+                      show_custom=show_custom, quiet=True)
 
     if not quiet:
-        print(f"\nAll wings written to: {outdir}")
+        print(f"\nAll wings written to: {color(outdir, C_TITLE)}")

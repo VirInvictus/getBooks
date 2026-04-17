@@ -60,6 +60,8 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Show tags instead of ratings in catalog output")
     p.add_argument("--show-id", dest="show_id", action="store_true",
                    help="Prefix each book with its Calibre ID for scripting")
+    p.add_argument("--show-custom", dest="show_custom", default=None, metavar="COL_NAME",
+                   help="Load and display a specific custom column")
     p.add_argument("--quiet", action="store_true", help="Minimize output")
 
     return p
@@ -82,14 +84,14 @@ def main(argv: Optional[List[str]] = None) -> int:
                 write_catalog(db, output, wing=args.wing,
                               primary_only=args.primary_only,
                               show_tags=args.show_tags, show_id=args.show_id,
-                              quiet=args.quiet)
+                              show_custom=args.show_custom, quiet=args.quiet)
                 return 0
 
             if args.all_wings:
                 outdir = args.outdir or "catalogs"
                 write_all_wings(db, outdir, primary_only=args.primary_only,
                                 show_tags=args.show_tags, show_id=args.show_id,
-                                quiet=args.quiet)
+                                show_custom=args.show_custom, quiet=args.quiet)
                 return 0
 
             if args.stats:
@@ -125,12 +127,12 @@ def main(argv: Optional[List[str]] = None) -> int:
             if args.export:
                 fmt = args.format or "json"
                 output = args.output or f"library.{fmt}"
-                run_export(db, output, fmt, quiet=args.quiet)
+                run_export(db, output, fmt, show_custom=args.show_custom, quiet=args.quiet)
                 return 0
 
             if args.search:
                 output = args.output or "search_results.txt"
-                run_search_export(db, args.search, output, quiet=args.quiet)
+                run_search_export(db, args.search, output, show_custom=args.show_custom, quiet=args.quiet)
                 return 0
 
             if args.wings:
@@ -143,7 +145,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 write_catalog(db, output, wing=args.wing,
                               primary_only=args.primary_only,
                               show_tags=args.show_tags, show_id=args.show_id,
-                              quiet=args.quiet)
+                              show_custom=args.show_custom, quiet=args.quiet)
                 return 0
 
             parser.print_help()

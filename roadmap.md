@@ -44,9 +44,9 @@ What's done, what's next. Updated as of v2.0.0.
 - [x] **Tag tree visualization** — display the full hierarchical tag taxonomy as a tree
 - [x] **Reading pace stats** — books added per month/year trend from `timestamp` column
 - [x] **Duplicate detection** — same title+author appearing in multiple formats or editions
-- [ ] **Custom column support** — read user-defined Calibre columns for display and filtering
+- [x] **Custom column support** — read user-defined Calibre columns for display and filtering
 - [x] **Cover quality audit** — flag books with covers below a resolution threshold
 - [x] **Author statistics** — per-author breakdowns (book count, ratings, formats, series)
 - [x] **Wing overlap analysis** — show which books appear in multiple virtual libraries
 - [x] **Format migration report** — identify books only available in deprecated formats (MOBI, LIT)
-- [ ] **Color CLI output** — ANSI color for terminal output in non-interactive mode
+- [x] **Color CLI output** — ANSI color for terminal output in non-interactive mode

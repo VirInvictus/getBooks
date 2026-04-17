@@ -1,5 +1,16 @@
 # CalibreQuarry — Patch Notes
 
+## v2.4.0 (2026-04-16)
+
+---
+
+### New Features
+
+**Custom Column Support.** Added a `--show-custom "Column Name"` flag that extracts data from user-defined custom Calibre columns. The values are automatically appended to text catalogs and are natively included in JSON, CSV, and AI exports.
+**Color CLI Output.** Introduced simple, lightweight ANSI color formatting for headers, warnings, and error highlights across CLI modes to improve readability when bypassing the interactive pager.
+
+---
+
 ## v2.3.0 (2026-04-16)
 
 ---
