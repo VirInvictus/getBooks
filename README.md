@@ -157,17 +157,45 @@ Tag taxonomy (392 tags):
   Parker: 10 of 18 (incomplete)  ⚠ missing: 8, 9, 10, 11, 12, 13, 14, 15
 ```
 
-## Virtual library resolution
+## Search Syntax & Virtual Library Resolution
 
-The script parses Calibre's virtual library definitions directly from the `preferences` table. These are the same search expressions Calibre uses internally:
+CalibreQuarry features a pure-Python search expression parser that perfectly replicates Calibre's internal search rules. This engine is used both to resolve Virtual Libraries (Wings) directly from the `preferences` table, and for the `--search` CLI mode.
 
 ```
+# Virtual Library Definitions
 Fantasy Wing:    tags:"Fic.Fantasy" or tags:"Fic.Speculative.Fantasy"
 The Tabletop:    tags:"Gaming.TTRPG"
 Unsorted:        not (vl:"The Tabletop" or vl:"Fantasy Wing" or ...)
+
+# CLI Search Queries
+cquarry --search 'tags:"Fic.Fantasy" AND NOT tags:"Horror"'
+cquarry --search 'tags:"=Fic.Fantasy.Epic"'
 ```
 
-Supported operators: `tags:Pattern`, `tags:"=Exact"`, `vl:Name`, `or`, `and`, `not`, parentheses. Tag matching follows Calibre's hierarchical convention — `tags:Fic.Fantasy` matches `Fic.Fantasy`, `Fic.Fantasy.Epic`, `Fic.Fantasy.Grimdark`, etc.
+### Supported Search Features
+
+* **Prefix Matching**: By default, Calibre tag searches are hierarchical. Searching for `tags:Fic.Fantasy` will match `Fic.Fantasy`, `Fic.Fantasy.Epic`, `Fic.Fantasy.Grimdark`, and so on.
+* **Exact Matching**: To disable prefix matching and search for an exact tag, prepend an equals sign: `tags:"=Fic.Fantasy"`. This will only match the exact tag `Fic.Fantasy` and will exclude child tags.
+* **Virtual Library Referencing**: You can use `vl:"Wing Name"` to cross-reference and search inside your existing Virtual Libraries.
+* **Boolean Logic**: The parser fully supports `AND`, `OR`, and `NOT` operators. Implicit `AND` operations (just separating tags with a space, e.g., `tags:Fic tags:SciFi`) are supported identically to explicitly writing `AND`.
+* **Grouping**: Use parentheses `()` to enforce precedence in complex queries, such as `(tags:Fic OR tags:NonFic) AND NOT tags:Gaming`.
+
+### Quote Handling (`"` and `'`)
+
+When running searches via the command line with `--search`, you must navigate your shell's quote-escaping rules because Calibre expressions frequently contain spaces and internal quotes.
+
+1. **Wrap the entire query in single quotes (`'`)**: This prevents your bash/zsh shell from trying to interpret spaces or special characters.
+2. **Use double quotes (`"`) inside the query**: Use double quotes around tag names or virtual library names, especially if they contain spaces or special matching operators like `=`.
+
+**Good Examples:**
+```bash
+cquarry --search 'tags:"Fic.SciFi" OR tags:"Fic.Fantasy"'
+cquarry --search 'vl:"The Tabletop" AND NOT tags:"=Gaming.TTRPG"'
+```
+
+**What to Avoid:**
+* Unquoted spaces will break your shell command: `cquarry --search tags:Fic OR tags:SciFi` (Your shell thinks `OR` is a separate argument).
+* Mismatched quotes will cause parsing errors: `cquarry --search "tags:'Fic.SciFi'"` (Calibre expects double quotes `"` internally, not single quotes).
 
 ## How it reads the database
 
