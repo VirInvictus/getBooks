@@ -238,6 +238,14 @@ class CalibreDB:
                 i += 5
                 pattern, i = self._read_value(expr, i)
                 tokens.append(f"tags:{pattern}")
+            elif expr[i:i + 8].lower() == 'authors:':
+                i += 8
+                pattern, i = self._read_value(expr, i)
+                tokens.append(f"authors:{pattern}")
+            elif expr[i:i + 7].lower() == 'author:':
+                i += 7
+                pattern, i = self._read_value(expr, i)
+                tokens.append(f"authors:{pattern}")
             elif expr[i:i + 3].lower() == 'vl:':
                 i += 3
                 name, i = self._read_value(expr, i)
@@ -339,6 +347,9 @@ class CalibreDB:
         if token.startswith('tags:'):
             pattern = token[5:]
             return self._match_tags(pattern)
+        elif token.startswith('authors:'):
+            pattern = token[8:]
+            return self._match_authors(pattern)
         elif token.startswith('vl:'):
             vl_name = token[3:]
             if vl_name in seen:
@@ -348,7 +359,7 @@ class CalibreDB:
                 return self._eval_vl_expr(vls[vl_name], seen | {vl_name})
             return set()
 
-        return set()
+        return self._match_anywhere(token)
 
     def _match_tags(self, pattern: str) -> Set[int]:
         """Match books whose tags match a pattern.
@@ -382,3 +393,62 @@ class CalibreDB:
             """, (pattern, f"{pattern}.%"))
 
         return {row['book'] for row in cur.fetchall()}
+
+    def _match_authors(self, pattern: str) -> Set[int]:
+        """Match books whose authors match a pattern.
+
+        Supports:
+          author:Foo       -- books with author containing 'Foo'
+          author:"=Foo"    -- books with exactly the author 'Foo'
+        """
+        exact = False
+        if pattern.startswith('='):
+            exact = True
+            pattern = pattern[1:]
+
+        pattern = pattern.strip('"')
+
+        cur = self.conn.cursor()
+        if exact:
+            cur.execute("""
+                SELECT DISTINCT bal.book FROM books_authors_link bal
+                JOIN authors a ON a.id = bal.author
+                WHERE a.name = ? COLLATE NOCASE
+            """, (pattern,))
+        else:
+            cur.execute("""
+                SELECT DISTINCT bal.book FROM books_authors_link bal
+                JOIN authors a ON a.id = bal.author
+                WHERE a.name LIKE ? COLLATE NOCASE
+            """, (f"%{pattern}%",))
+
+        return {row['book'] for row in cur.fetchall()}
+
+    def _match_anywhere(self, term: str) -> Set[int]:
+        """Match books where the term appears in title, authors, or tags."""
+        term = term.strip('"')
+        cur = self.conn.cursor()
+        
+        books = set()
+        
+        # title
+        cur.execute("SELECT id FROM books WHERE title LIKE ? COLLATE NOCASE", (f"%{term}%",))
+        books.update(row['id'] for row in cur.fetchall())
+        
+        # authors
+        cur.execute("""
+            SELECT bal.book FROM books_authors_link bal
+            JOIN authors a ON a.id = bal.author
+            WHERE a.name LIKE ? COLLATE NOCASE
+        """, (f"%{term}%",))
+        books.update(row['book'] for row in cur.fetchall())
+        
+        # tags
+        cur.execute("""
+            SELECT btl.book FROM books_tags_link btl
+            JOIN tags t ON t.id = btl.tag
+            WHERE t.name LIKE ? COLLATE NOCASE
+        """, (f"%{term}%",))
+        books.update(row['book'] for row in cur.fetchall())
+        
+        return books

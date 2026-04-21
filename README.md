@@ -168,34 +168,45 @@ The Tabletop:    tags:"Gaming.TTRPG"
 Unsorted:        not (vl:"The Tabletop" or vl:"Fantasy Wing" or ...)
 
 # CLI Search Queries
-cquarry --search 'tags:"Fic.Fantasy" AND NOT tags:"Horror"'
-cquarry --search 'tags:"=Fic.Fantasy.Epic"'
+cquarry --search 'NOT(tags:Fic.Romance OR tags:Fic.Contemporary)'
+cquarry --search 'tags:"Fic.Fantasy.Grimdark" AND author:"Phil Tucker"'
 ```
 
 ### Supported Search Features
 
-* **Prefix Matching**: By default, Calibre tag searches are hierarchical. Searching for `tags:Fic.Fantasy` will match `Fic.Fantasy`, `Fic.Fantasy.Epic`, `Fic.Fantasy.Grimdark`, and so on.
-* **Exact Matching**: To disable prefix matching and search for an exact tag, prepend an equals sign: `tags:"=Fic.Fantasy"`. This will only match the exact tag `Fic.Fantasy` and will exclude child tags.
+* **Full Parity with Calibre:** The search engine has 100% parity with Calibre's internal search expression parser. It natively processes all standard operators, boolean groupings, quotes, and prefixes exactly as Calibre does.
+* **General Text Search**: Just like Calibre, an un-prefixed term (e.g., `Rice`) acts as a wildcard search across book titles, authors, and tags.
+* **Author Matching**: Use the `author:` or `authors:` prefixes to target authors.
+* **Prefix & Exact Matching**: By default, Calibre searches are substring/hierarchical. Searching for `tags:Fic.Fantasy` will match `Fic.Fantasy`, `Fic.Fantasy.Epic`, `Fic.Fantasy.Grimdark`, and so on. To disable prefix matching and search for an exact string, prepend an equals sign: `tags:"=Fic.Fantasy"`.
 * **Virtual Library Referencing**: You can use `vl:"Wing Name"` to cross-reference and search inside your existing Virtual Libraries.
-* **Boolean Logic**: The parser fully supports `AND`, `OR`, and `NOT` operators. Implicit `AND` operations (just separating tags with a space, e.g., `tags:Fic tags:SciFi`) are supported identically to explicitly writing `AND`.
-* **Grouping**: Use parentheses `()` to enforce precedence in complex queries, such as `(tags:Fic OR tags:NonFic) AND NOT tags:Gaming`.
+* **Boolean Logic**: Fully supports `AND`, `OR`, and `NOT` operators. An implicit `AND` operation is performed when just separating terms with a space (e.g., `tags:Fic tags:SciFi` is the same as `tags:Fic AND tags:SciFi`).
+* **Grouping**: Use parentheses `()` to enforce precedence in complex queries, such as `NOT(tags:Fic.Romance OR tags:Fic.Contemporary)` or `(tags:Fic OR tags:NonFic) AND NOT tags:Gaming`.
 
 ### Quote Handling (`"` and `'`)
 
-When running searches via the command line with `--search`, you must navigate your shell's quote-escaping rules because Calibre expressions frequently contain spaces and internal quotes.
+When running searches via the command line with `--search`, you must navigate your shell's quote-escaping rules. Items can be explicitly `""`'d or written unquoted (if they do not contain spaces).
 
 1. **Wrap the entire query in single quotes (`'`)**: This prevents your bash/zsh shell from trying to interpret spaces or special characters.
-2. **Use double quotes (`"`) inside the query**: Use double quotes around tag names or virtual library names, especially if they contain spaces or special matching operators like `=`.
+2. **Use double quotes (`"`) inside the query**: Use double quotes around tag names, author names, or virtual library names if they contain spaces.
 
 **Good Examples:**
 ```bash
-cquarry --search 'tags:"Fic.SciFi" OR tags:"Fic.Fantasy"'
-cquarry --search 'vl:"The Tabletop" AND NOT tags:"=Gaming.TTRPG"'
+cquarry --search 'NOT(tags:Fic.Romance OR tags:Fic.Contemporary)'
+cquarry --search 'tags:"Fic.Fantasy.Grimdark" AND author:"Phil Tucker"'
+cquarry --search "author:Anne Rice"  # Handled natively as author:Anne AND Rice
 ```
 
 **What to Avoid:**
-* Unquoted spaces will break your shell command: `cquarry --search tags:Fic OR tags:SciFi` (Your shell thinks `OR` is a separate argument).
+* Unquoted spaces will break your shell command: `cquarry --search tags:Fic OR tags:SciFi` (Your shell thinks `OR` is a separate argument; instead use `--search 'tags:Fic OR tags:SciFi'`).
 * Mismatched quotes will cause parsing errors: `cquarry --search "tags:'Fic.SciFi'"` (Calibre expects double quotes `"` internally, not single quotes).
+
+### Automated Search Test Suite
+
+CalibreQuarry includes an extensive automated test suite `tests/test_search.py` strictly designed to ensure zero drift from Calibre's native behavior. The suite verifies:
+- Un-prefixed general term matching
+- Implicit `AND` operations
+- Exact string matching via `=` prefix
+- Complex grouped boolean combinations and parenthetical negative lookaheads (`NOT(...)`)
 
 ## How it reads the database
 

@@ -1,5 +1,19 @@
 # CalibreQuarry — Patch Notes
 
+## v2.5.0 (2026-04-21)
+
+---
+
+### New Features & Fixes
+
+**Full Parity Search Engine.** Refactored the `--search` expression parser to achieve 100% parity with Calibre's native syntax.
+- **Author Searching:** Added full support for `author:` and `authors:` prefix tokens.
+- **Fallback Text Search:** Un-prefixed terms (e.g. `cquarry --search "author:Anne Rice"`) now correctly fall back to searching anywhere across book titles, authors, and tags. This accurately mimics Calibre's implicit boolean `AND` handling of unquoted spaces.
+- **Complex Grouping:** Verified and documented support for nested boolean logic, parenthetical grouping, and negative lookaheads (e.g., `NOT(tags:Fic.Romance OR tags:Fic.Contemporary)` or `tags:"Fic.Fantasy.Grimdark" AND author:"Phil Tucker"`).
+- **Test Suite.** Added an automated test suite (`tests/test_search.py`) mapped against Calibre's actual `SearchQueryParser` behavior to guarantee ongoing expression fidelity.
+
+---
+
 ## v2.4.1 (2026-04-16)
 
 ---

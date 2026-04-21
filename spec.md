@@ -1,6 +1,6 @@
 # CalibreQuarry — Application Specification
 
-**Version:** 2.0  
+**Version:** 2.5.0  
 **Language:** Python 3.9+  
 **Dependencies:** None (stdlib only: sqlite3, json, csv, argparse)  
 **License:** MIT
