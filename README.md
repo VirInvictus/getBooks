@@ -29,6 +29,7 @@ This tool reads the SQLite database directly in read-only mode. It resolves Cali
 | **Series** | `--series` | List all series with completeness status and gap detection |
 | **Export** | `--export` | Full library export to JSON or CSV for external tools |
 | **Wings** | `--wings` | List all virtual libraries with book counts |
+| **Tags** | `--tags` | Flat dump of every tag with its book count |
 | **Version** | `--version` | Show version and exit |
 
 Modifiers: `--show-tags` swaps ratings for tag display in catalogs, `--show-id` prefixes each book with its Calibre ID (useful for scripting against `calibredb set_metadata`), `--primary-only` collapses multi-author entries to the first author, `--quiet` suppresses decorative output.
@@ -93,6 +94,9 @@ cquarry --export --db ~/Calibre/metadata.db --format json --output library.json
 
 # List all virtual library wings with counts
 cquarry --wings --db ~/Calibre/metadata.db
+
+# Dump every tag with its book count (replaces `calibredb list_categories -r tags`)
+cquarry --tags > ~/docs/catalogs/tags.txt
 
 # Check version
 cquarry --version
@@ -243,6 +247,7 @@ options:
   --series             List all series with completeness and gap detection
   --export             Export library to JSON or CSV
   --wings              List all virtual library wings
+  --tags               Dump every tag with its book count
   --db DB              Path to Calibre metadata.db (auto-detected if omitted)
   --wing WING          Filter to a specific virtual library wing
   --output OUTPUT      Output file path

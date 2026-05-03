@@ -1,5 +1,15 @@
 # CalibreQuarry — Patch Notes
 
+## v2.6.0 (2026-05-03)
+
+---
+
+### New Features
+
+**Tag Dump (`--tags`).** A flat, alphabetized list of every tag in the library with its book count, written to stdout. Drop-in replacement for the noisy `calibredb list_categories -r tags` shell pipeline — pipe it to a file with `cquarry --tags > tags.txt`. Also reachable as "Tag dump" under LISTS in the interactive TUI. Honors `--quiet` (suppresses header/footer, leaves the body intact for scripting). Distinct from `--analytics tags`, which renders the hierarchical tree.
+
+---
+
 ## v2.5.0 (2026-04-21)
 
 ---

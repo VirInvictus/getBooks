@@ -15,6 +15,7 @@ from cquarry.modes.stats import show_stats
 from cquarry.modes.audit import run_audit
 from cquarry.modes.display import show_recent, show_series, show_wings
 from cquarry.modes.export import run_export, run_search_export
+from cquarry.modes.tags import show_tag_dump
 
 try:
     import curses
@@ -484,6 +485,7 @@ _MAIN_SECTIONS = [
         "Recently added",
         "Series list (with gap detection)",
         "List wings",
+        "Tag dump (flat list with counts)",
     ]),
     ("EXPORT", [
         "Export (JSON/CSV/AI)",
@@ -507,7 +509,8 @@ _MAIN_FALLBACK_MAP = {
     "10": (2, 0), "recent": (2, 0),
     "11": (2, 1), "series": (2, 1),
     "12": (2, 2), "wings": (2, 2),
-    "13": (3, 0), "export": (3, 0),
+    "13": (2, 3), "tag-dump": (2, 3), "tagdump": (2, 3),
+    "14": (3, 0), "export": (3, 0),
     "s": (4, 0), "settings": (4, 0), "config": (4, 0),
     "q": None, "quit": None, "exit": None,
 }
@@ -519,12 +522,12 @@ def _select_main() -> Optional[tuple]:
     _box_menu(f"CalibreQuarry v{VERSION}", [
         ("OUTPUT", ["1) Build catalog", "2) Generate all wings", "3) Statistics", "4) Audit", "5) Search query export"]),
         ("ANALYTICS", ["6) Author statistics", "7) Reading pace", "8) Tag tree", "9) Wing overlap"]),
-        ("LISTS", ["10) Recently added", "11) Series list", "12) List wings"]),
-        ("EXPORT", ["13) Export (JSON/CSV/AI)"]),
+        ("LISTS", ["10) Recently added", "11) Series list", "12) List wings", "13) Tag dump"]),
+        ("EXPORT", ["14) Export (JSON/CSV/AI)"]),
         ("SETTINGS", ["s) Change database path"]),
         ("", ["q) Quit"]),
     ])
-    return _fallback_input("  Select [1-13/s/q]: ", _MAIN_FALLBACK_MAP)
+    return _fallback_input("  Select [1-14/s/q]: ", _MAIN_FALLBACK_MAP)
 
 
 # =====================================
@@ -669,6 +672,10 @@ def interactive_menu() -> int:
             elif result == (2, 2):
                 _reset_terminal()
                 _run_with_capture("Virtual Libraries", lambda: show_wings(db))
+
+            elif result == (2, 3):
+                _reset_terminal()
+                _run_with_capture("Tag Dump", lambda: show_tag_dump(db))
 
             elif result == (3, 0):
                 fmt = _prompt_str("Format (json/csv/ai)", "json")

@@ -10,6 +10,7 @@ commands=(
   "python -m cquarry --recent 5 --db \"$DB_PATH\" > /tmp/test_recent.txt"
   "python -m cquarry --series --db \"$DB_PATH\" > /tmp/test_series.txt"
   "python -m cquarry --wings --db \"$DB_PATH\" > /tmp/test_wings.txt"
+  "python -m cquarry --tags --db \"$DB_PATH\" > /tmp/test_tags.txt"
   "python -m cquarry --export --format json --db \"$DB_PATH\" --output /tmp/test_export.json"
   "python -m cquarry --export --format csv --db \"$DB_PATH\" --output /tmp/test_export.csv"
   "python -m cquarry --export --format ai --db \"$DB_PATH\" --output /tmp/test_export.ai"

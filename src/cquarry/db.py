@@ -110,6 +110,18 @@ class CalibreDB:
         cur.execute("SELECT DISTINCT name FROM tags ORDER BY name")
         return [row['name'] for row in cur.fetchall()]
 
+    def get_tag_counts(self) -> List[Tuple[str, int]]:
+        """Return [(tag_name, book_count), ...] sorted by tag name."""
+        cur = self.conn.cursor()
+        cur.execute("""
+            SELECT t.name as name, COUNT(btl.book) as count
+            FROM tags t
+            LEFT JOIN books_tags_link btl ON btl.tag = t.id
+            GROUP BY t.id, t.name
+            ORDER BY t.name
+        """)
+        return [(row['name'], row['count']) for row in cur.fetchall()]
+
     def get_all_series(self) -> List[Dict[str, Any]]:
         cur = self.conn.cursor()
         cur.execute("""

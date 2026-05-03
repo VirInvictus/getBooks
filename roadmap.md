@@ -50,3 +50,4 @@ What's done, what's next. Updated as of v2.0.0.
 - [x] **Wing overlap analysis** — show which books appear in multiple virtual libraries
 - [x] **Format migration report** — identify books only available in deprecated formats (MOBI, LIT)
 - [x] **Color CLI output** — ANSI color for terminal output in non-interactive mode
+- [x] **Tag dump** — flat list of every tag with book counts, replacing `calibredb list_categories -r tags`

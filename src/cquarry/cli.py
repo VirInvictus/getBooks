@@ -13,6 +13,7 @@ from cquarry.modes.analytics import show_author_stats, show_pace_stats, show_tag
 from cquarry.modes.audit import run_audit
 from cquarry.modes.display import show_recent, show_series, show_wings
 from cquarry.modes.export import run_export, run_search_export
+from cquarry.modes.tags import show_tag_dump
 from cquarry.tui import interactive_menu, _reset_terminal
 
 
@@ -44,6 +45,8 @@ def build_parser() -> argparse.ArgumentParser:
                        help="Export books matching a Calibre search expression")
     group.add_argument("--wings", action="store_true",
                        help="List all virtual library wings")
+    group.add_argument("--tags", action="store_true",
+                       help="Dump every tag with its book count")
 
     p.add_argument("--db", default=None,
                    help="Path to Calibre metadata.db (auto-detected if omitted)")
@@ -137,6 +140,10 @@ def main(argv: Optional[List[str]] = None) -> int:
 
             if args.wings:
                 show_wings(db)
+                return 0
+
+            if args.tags:
+                show_tag_dump(db, quiet=args.quiet)
                 return 0
 
             # If --wing was given without a mode, default to catalog

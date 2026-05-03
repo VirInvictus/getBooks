@@ -1,6 +1,6 @@
 # CalibreQuarry — Application Specification
 
-**Version:** 2.5.0  
+**Version:** 2.6.0  
 **Language:** Python 3.9+  
 **Dependencies:** None (stdlib only: sqlite3, json, csv, argparse)  
 **License:** MIT
@@ -63,6 +63,7 @@ The path is saved to config on first successful resolution.
 | Series | `--series` | All series with completeness and gap detection |
 | Export | `--export` | Full library to JSON or CSV |
 | Wings | `--wings` | List virtual libraries with book counts |
+| Tags | `--tags` | Flat dump of every tag in the library with its book count |
 | Interactive | (no args) | Launch the Curses TUI with scrollable output pager |
 
 ### 3.1 Modifiers
